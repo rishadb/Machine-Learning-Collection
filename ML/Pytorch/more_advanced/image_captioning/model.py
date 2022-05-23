@@ -33,7 +33,7 @@ class DecoderRNN(nn.Module):
         hiddens, _ = self.lstm(embeddings)
         outputs = self.linear(hiddens)
         return outputs
-
+#
 
 class CNNtoRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers):
