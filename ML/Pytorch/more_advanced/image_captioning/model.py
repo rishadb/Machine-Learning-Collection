@@ -23,15 +23,15 @@ class DecoderRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers):
         super(DecoderRNN, self).__init__()
         self.embed = nn.Embedding(vocab_size, embed_size)
-        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers)
-        self.linear = nn.Linear(hidden_size, vocab_size)
+        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers) # note the batch_first is false by default, so output would be seq_size, batch_size, hidden_size
+        self.linear = nn.Linear(hidden_size, vocab_size) 
         self.dropout = nn.Dropout(0.5)
 
     def forward(self, features, captions):
         embeddings = self.dropout(self.embed(captions))
         embeddings = torch.cat((features.unsqueeze(0), embeddings), dim=0)
-        hiddens, _ = self.lstm(embeddings)
-        outputs = self.linear(hiddens)
+        hiddens, _ = self.lstm(embeddings) #hideens would be seq_size, batch_size, hidden_size
+        outputs = self.linear(hiddens) # somehow, you can give sequence of batches of hiddens to linear and get back (seq_size, batch_size) tensor as output??
         return outputs
 
 
